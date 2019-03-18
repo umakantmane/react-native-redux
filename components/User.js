@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux';
-import allStore from './store/StoreAll';
+import Display from './Display';
+import { postDataToRedux,postDataToRedux2 } from './store/actions/UserAction';
 
 class Users extends React.Component {
 
@@ -17,9 +18,11 @@ class Users extends React.Component {
     addData = () => {
         let payload = {username:this.state.username, email:"manas@gmail.com"};
         //Action {type:dispatch, username}
-        this.props.dispatch({
-            type:'ADD_USER', payload
-        });
+        // this.props.dispatch({
+        //     type:'ADD_USER', payload:[payload]
+        // });
+
+        this.props.postData([payload]);
     }
     setName = (text) => {
 
@@ -33,6 +36,7 @@ class Users extends React.Component {
         return(
             
             <View style={styles.container}>
+              <Display />
                 <Text> Hello... </Text>
                 <TextInput
                 style={{padding:5, borderWidth:2}} 
@@ -44,26 +48,29 @@ class Users extends React.Component {
                 color="purple"
                 onPress={this.addData}
                 />
-                {/* {
-                    this.props.userlist.map((row)=>(
-                        <Text> { row.name }</Text>
-                    ))
-                } */}
                 
-                <Text> { this.props.userlist.username }</Text>
-                <Text> { this.props.userlist.email }</Text>
+             
 
             </View>
         )
     }
 }
 
-const mapStateToProps = (state) => {
-
-    return { userlist: state.users2 };
-}
-
-
+const mapStateToProps = (state) =>{
+    return {
+        product:state
+    }
+  };
+const mapDispatchToProps = (dispatch)=>{
+    return {
+      postData:function(data){
+        dispatch(postDataToRedux(data));
+        },
+        postData2:function(data){
+            dispatch(postDataToRedux2(data))
+        }
+    }
+  };
 const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -72,4 +79,4 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
   });
-export default connect(mapStateToProps) (Users);
+export default connect(mapStateToProps,mapDispatchToProps) (Users);
